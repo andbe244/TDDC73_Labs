@@ -1,28 +1,17 @@
-// api.ts
-export const fetchRepos = async () => {
-  const response = await fetch("https://api.github.com/search/repositories?q=language:cpp&sort=stars&order=desc&per_page=30&page=1");
-  if (!response.ok) {
-    throw new Error("Failed to fetch repositories");
-  }
-  return await response.json();
-};
+export async function fetchRepos(language: string): Promise<any> {
+  const today = new Date();
+  const timeInterval = new Date(today.setDate(today.getDate() - 40)).toISOString().split("T")[0];
+  const url = `https://api.github.com/search/repositories?q=language:${language}+created:>${timeInterval}&sort=stars&order=desc&per_page=30&page=1`;
 
-export const fetchRepoDetails = async (fullName: string) => {
   try {
-    const [branchesRes, commitsRes] = await Promise.all([
-      fetch(`https://api.github.com/repos/${fullName}/branches`),
-      fetch(`https://api.github.com/repos/${fullName}/commits`),
-    ]);
-
-    const branches = branchesRes.ok ? await branchesRes.json() : [];
-    const commits = commitsRes.ok ? await commitsRes.json() : [];
-
-    return {
-      branchesCount: branches.length,
-      commitsCount: commits.length,
-    };
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error("Error fetching repository details:", error);
-    return { branchesCount: 0, commitsCount: 0 };
+    console.error("Error fetching repositories:", error);
+    throw error;
   }
-};
+}

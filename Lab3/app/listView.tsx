@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, StyleSheet } from "react-native";
 import { fetchRepos } from "./api";
 
+
 interface Repo {
   id: number;
   name: string;
@@ -13,18 +14,20 @@ interface Repo {
 
 interface ListViewProps {
   onSelectRepo: (repo: Repo) => void;
+  language: string;
 }
 
-const ListView: React.FC<ListViewProps> = ({ onSelectRepo }) => {
+const ListView: React.FC<ListViewProps> = ({ onSelectRepo, language }) => {
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    fetchRepos()
-      .then(setRepos)
+    setLoading(true);
+    fetchRepos(language)
+      .then((data) => setRepos(data.items || []))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
-  }, []);
+  }, [language]);
 
   if (loading) {
     return <ActivityIndicator size="large" color="#0000ff" />;
@@ -32,7 +35,6 @@ const ListView: React.FC<ListViewProps> = ({ onSelectRepo }) => {
 
   return (
     <View style={styles.container}>
-      {/* <Text> HELLO </Text> */}
       <FlatList
         data={repos}
         keyExtractor={(item) => item.id.toString()}
@@ -62,7 +64,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     borderRadius: 5,
-    //borderColor: "#5c5cd6",
   },
   title: { 
     fontSize: 18, 
@@ -79,7 +80,6 @@ const styles = StyleSheet.create({
     color: "#9999e6",
     lineHeight: 22,
   },
-
 });
 
 export default ListView;

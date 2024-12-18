@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Button, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
-import { fetchRepoDetails } from "./api";
-import { TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, StyleSheet } from "react-native";
 
 interface Repo {
   id: number;
@@ -20,10 +18,30 @@ const DetailView: React.FC<DetailViewProps> = ({ repo, onBack }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    fetchRepoDetails(repo.full_name)
-      .then(setDetails)
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
+    const fetchDetails = async () => {
+      const branchesUrl = `https://api.github.com/repos/${repo.full_name}/branches`;
+      const commitsUrl = `https://api.github.com/repos/${repo.full_name}/commits`;
+      try {
+        const [branchesRes, commitsRes] = await Promise.all([
+          fetch(branchesUrl),
+          fetch(commitsUrl)
+        ]);
+
+        const branches = await branchesRes.json();
+        const commits = await commitsRes.json();
+
+        setDetails({
+          branchesCount: branches.length || 0,
+          commitsCount: commits.length || 0
+        });
+      } catch (error) {
+        console.error("Error fetching details:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDetails();
   }, [repo]);
 
   if (loading || !details) {
@@ -36,25 +54,19 @@ const DetailView: React.FC<DetailViewProps> = ({ repo, onBack }) => {
         <Text style={styles.title}>{repo.name}</Text>
         <Text style={styles.subtitle}>Full Name:</Text>
         <Text style={styles.content}>{repo.full_name}</Text>
-
         <Text style={styles.subtitle}>Description:</Text>
-        <Text style={styles.content}>
-          {repo.description || "No description available."}
-        </Text>
-
+        <Text style={styles.content}>{repo.description || "No description available."}</Text>
         <Text style={styles.subtitle}>Number of Branches:</Text>
         <Text style={styles.content}>{details.branchesCount}</Text>
-
         <Text style={styles.subtitle}>Number of Commits:</Text>
         <Text style={styles.content}>{details.commitsCount}</Text>
-      </View>x
+      </View>
 
       <View style={styles.buttonContainer}>
-  <TouchableOpacity onPress={onBack} style={styles.button}>
-  <Text style={styles.buttonText}>Back to List</Text>
-  </TouchableOpacity>
-</View>
-
+        <TouchableOpacity onPress={onBack} style={styles.button}>
+          <Text style={styles.buttonText}>Back to List</Text>
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   );
 };
@@ -99,26 +111,18 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignSelf: "center",
     width: 120,
-  
   },
-
   button: {
-
-    borderRadius: 8, 
+    borderRadius: 8,
     width: 120,
     height: 30,
     backgroundColor: "#adadeb",
   },
-
   buttonText: {
-
-    textAlign:"center", 
+    textAlign: "center",
     fontSize: 16,
     paddingTop: 5,
-
-
-  }
+  },
 });
 
 export default DetailView;
-
