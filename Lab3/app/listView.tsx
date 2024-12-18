@@ -30,7 +30,7 @@ const ListView: React.FC<ListViewProps> = ({ onSelectRepo }) => {
 
   return (
     <View style={styles.container}>
-      <Text> HELLO </Text>
+      {/* <Text> HELLO </Text> */}
       <FlatList
         data={repos}
         keyExtractor={(item) => item.id.toString()}
@@ -49,24 +49,26 @@ const styles = StyleSheet.create({
   container: { 
     flex: 1, 
     padding: 10, 
-    backgroundColor: 'white',
+    backgroundColor: '#080016',
   },
   item: {
     padding: 10, 
     borderBottomWidth: 1, 
-    backgroundColor: 'gray',
-    margin: 2,
+    backgroundColor: '#16142d',
+    margin: 4,
+    marginLeft: 20,
+    marginRight: 20,
     borderRadius: 5,
     //borderColor: "#ddd",
   },
   title: { 
     fontSize: 16, 
-    color: 'black',
+    color: '#d6d6f5',
     fontWeight: "bold", 
   },
   subtitle: { 
     fontSize: 12, 
-    color: "#555",
+    color: "#adadeb",
   },
 
 });
