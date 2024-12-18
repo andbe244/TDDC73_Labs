@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Button, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { fetchRepoDetails } from "./api";
+import { TouchableOpacity } from "react-native";
 
 interface Repo {
   id: number;
@@ -31,7 +32,7 @@ const DetailView: React.FC<DetailViewProps> = ({ repo, onBack }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.card}>
+      <View style={styles.item}>
         <Text style={styles.title}>{repo.name}</Text>
         <Text style={styles.subtitle}>Full Name:</Text>
         <Text style={styles.content}>{repo.full_name}</Text>
@@ -46,11 +47,14 @@ const DetailView: React.FC<DetailViewProps> = ({ repo, onBack }) => {
 
         <Text style={styles.subtitle}>Number of Commits:</Text>
         <Text style={styles.content}>{details.commitsCount}</Text>
-      </View>
+      </View>x
 
       <View style={styles.buttonContainer}>
-        <Button title="Back to List" onPress={onBack} color="#007AFF" />
-      </View>
+  <TouchableOpacity onPress={onBack} style={styles.button}>
+  <Text style={styles.buttonText}>Back to List</Text>
+  </TouchableOpacity>
+</View>
+
     </ScrollView>
   );
 };
@@ -59,10 +63,10 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     padding: 20,
-    backgroundColor: "#f7f9fc",
+    backgroundColor: "#080016",
   },
-  card: {
-    backgroundColor: "#ffffff",
+  item: {
+    backgroundColor: "#16142d",
     borderRadius: 10,
     padding: 20,
     shadowColor: "#000",
@@ -75,27 +79,45 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#333333",
+    color: "#d6d6f5",
     textAlign: "center",
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#007AFF",
+    color: "#d6d6f5",
     marginTop: 15,
     marginBottom: 5,
   },
   content: {
     fontSize: 16,
-    color: "#555555",
+    color: "#adadeb",
     lineHeight: 22,
   },
   buttonContainer: {
     marginTop: 20,
     alignSelf: "center",
-    width: "60%",
+    width: 120,
+  
   },
+
+  button: {
+
+    borderRadius: 8, 
+    width: 120,
+    height: 30,
+    backgroundColor: "#adadeb",
+  },
+
+  buttonText: {
+
+    textAlign:"center", 
+    fontSize: 16,
+    paddingTop: 5,
+
+
+  }
 });
 
 export default DetailView;
