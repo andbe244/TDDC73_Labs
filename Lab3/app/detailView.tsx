@@ -6,8 +6,9 @@ interface Repo {
   name: string;
   full_name: string;
   description: string;
-  created_at: string;
-  last_fetched: string;
+  created_at?: string;
+  last_fetched?: string;
+  
 }
 
 interface DetailViewProps {

@@ -8,25 +8,27 @@ interface Repo {
   name: string;
   full_name: string;
   description: string;
-  created_at: string; // Added
-  last_fetched: string; // Added
+  created_at?: string; 
+  last_fetched?: string; 
+  //language: string;
 }
 
 export default function Index() {
   const [selectedRepo, setSelectedRepo] = useState<Repo | null>(null);
-  const [language, setLanguage] = useState<string>("javascript"); // Default language
+  const [language, setLanguage] = useState<string>("javascript"); 
 
   return (
     <View style={styles.container}>
       {selectedRepo ? (
-        // Pass the selectedRepo and onBack callback to DetailView
+
+       
         <DetailView repo={selectedRepo} onBack={() => setSelectedRepo(null)} />
       ) : (
-        // Pass the onSelectRepo and language props to ListView
+      
         <ListView
-          language={language} // Provide the required language prop
+          language={language} 
           onSelectRepo={(repo) => {
-            const now = new Date().toISOString(); // Add "last_fetched" timestamp
+            const now = new Date().toISOString(); 
             setSelectedRepo({ ...repo, last_fetched: now });
           }}
         />

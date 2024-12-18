@@ -15,6 +15,7 @@ interface Repo {
 
 interface ListViewProps {
   onSelectRepo: (repo: Repo) => void;
+  language: string;
 }
 
 const ListView: React.FC<ListViewProps> = ({ onSelectRepo }) => {
@@ -37,6 +38,7 @@ const ListView: React.FC<ListViewProps> = ({ onSelectRepo }) => {
           description: repo.description,
           created_at: repo.created_at,
           last_fetched: now,
+          language: repo.language,
         }));
 
         setRepos(enrichedRepos);
@@ -81,7 +83,7 @@ const ListView: React.FC<ListViewProps> = ({ onSelectRepo }) => {
         <TouchableOpacity style={styles.item} onPress={() => onSelectRepo(item)}>
           <View style={styles.titleRow}>
             <Text style={styles.title}>{item.name}</Text>
-            <Text style={styles.language}>{item.language || "Not specified"}</Text>
+            <Text style={styles.language}>{item.language|| "Not specified"}</Text>
           </View>
           <Text style={styles.subtitle}>{item.full_name}</Text>
           <Text style={styles.content}>{item.description || "No description available."}</Text>
