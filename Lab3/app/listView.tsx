@@ -10,6 +10,7 @@ interface Repo {
   description: string;
   forks: { totalCount: number };
   stargazerCount: number;
+  language: string;
 }
 
 interface ListViewProps {
@@ -57,13 +58,18 @@ const ListView: React.FC<ListViewProps> = ({ onSelectRepo }) => {
         data={repos}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.item} onPress={() => onSelectRepo(item)}>
+        <TouchableOpacity style={styles.item} onPress={() => onSelectRepo(item)}>
+          <View style={styles.titleRow}>
             <Text style={styles.title}>{item.name}</Text>
-            <Text style={styles.subtitle}>{item.full_name}</Text>
-            <Text style={styles.content}>{item.description || "No description available."}</Text>
-          </TouchableOpacity>
-        )}
-      />
+            <Text style={styles.language}>{item.language || "Not specified"}</Text>
+          </View>
+          <Text style={styles.subtitle}>{item.full_name}</Text>
+          <Text style={styles.content}>{item.description || "No description available."}</Text>
+        </TouchableOpacity>
+  )}
+/>
+
+
     </View>
   );
 };
@@ -118,20 +124,31 @@ const styles = StyleSheet.create({
     marginRight: 20,
     borderRadius: 5,
   },
+  titleRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   title: { 
     fontSize: 18, 
     color: '#ebebfa',
     fontWeight: "bold", 
+  }, 
+  subtitle: {
+    fontSize: 12,
+    color: "#9999e6",
+    lineHeight: 22,
   },
   content: { 
     fontSize: 14, 
     color: "#c2c2f0",
     marginTop: 6,
   },
-  subtitle: {
+  language: {
     fontSize: 12,
-    color: "#9999e6",
-    lineHeight: 22,
+    color: '#dfff80',
+    fontWeight: "bold",
+    marginTop: 5,
   },
 });
 
