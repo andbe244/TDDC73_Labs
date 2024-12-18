@@ -7,6 +7,8 @@ interface Repo {
   name: string;
   full_name: string;
   description: string;
+  forks: { totalCount: number };
+  stargazerCount: number;
 }
 
 interface ListViewProps {
@@ -38,6 +40,7 @@ const ListView: React.FC<ListViewProps> = ({ onSelectRepo }) => {
           <TouchableOpacity style={styles.item} onPress={() => onSelectRepo(item)}>
             <Text style={styles.title}>{item.name}</Text>
             <Text style={styles.subtitle}>{item.full_name}</Text>
+            <Text style={styles.content}>{item.description || "No description available."}</Text>
           </TouchableOpacity>
         )}
       />
@@ -59,16 +62,22 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     borderRadius: 5,
-    //borderColor: "#ddd",
+    //borderColor: "#5c5cd6",
   },
   title: { 
-    fontSize: 16, 
-    color: '#d6d6f5',
+    fontSize: 18, 
+    color: '#ebebfa',
     fontWeight: "bold", 
   },
   subtitle: { 
-    fontSize: 12, 
-    color: "#adadeb",
+    fontSize: 14, 
+    color: "#c2c2f0",
+  },
+  content: {
+    fontSize: 12,
+    marginTop: 6,
+    color: "#9999e6",
+    lineHeight: 22,
   },
 
 });
