@@ -2,14 +2,13 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, StyleSheet } from "react-native";
 import { fetchRepos } from "./api";
 
-
 interface Repo {
   id: number;
   name: string;
   full_name: string;
   description: string;
-  forks: { totalCount: number };
-  stargazerCount: number;
+  created_at: string;
+  last_fetched: string;
 }
 
 interface ListViewProps {
@@ -22,11 +21,31 @@ const ListView: React.FC<ListViewProps> = ({ onSelectRepo, language }) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    setLoading(true);
-    fetchRepos(language)
-      .then((data) => setRepos(data.items || []))
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
+    const fetchAllRepos = async () => {
+      setLoading(true);
+      try {
+        const now = new Date().toISOString(); // For "last fetched"
+        const data = await fetchRepos(language);
+
+        // Add `last_fetched` to each repo
+        const enrichedRepos = data.items.map((repo: any) => ({
+          id: repo.id,
+          name: repo.name,
+          full_name: repo.full_name,
+          description: repo.description,
+          created_at: repo.created_at,
+          last_fetched: now,
+        }));
+
+        setRepos(enrichedRepos);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAllRepos();
   }, [language]);
 
   if (loading) {

@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, ActivityIndicator, TouchableOpacity, StyleSheet } from "react-native";
+import React from "react";
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
 
 interface Repo {
   id: number;
   name: string;
   full_name: string;
   description: string;
+  created_at: string;
+  last_fetched: string;
 }
 
 interface DetailViewProps {
@@ -14,40 +16,6 @@ interface DetailViewProps {
 }
 
 const DetailView: React.FC<DetailViewProps> = ({ repo, onBack }) => {
-  const [details, setDetails] = useState<{ branchesCount: number; commitsCount: number } | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const fetchDetails = async () => {
-      const branchesUrl = `https://api.github.com/repos/${repo.full_name}/branches`;
-      const commitsUrl = `https://api.github.com/repos/${repo.full_name}/commits`;
-      try {
-        const [branchesRes, commitsRes] = await Promise.all([
-          fetch(branchesUrl),
-          fetch(commitsUrl)
-        ]);
-
-        const branches = await branchesRes.json();
-        const commits = await commitsRes.json();
-
-        setDetails({
-          branchesCount: branches.length || 0,
-          commitsCount: commits.length || 0
-        });
-      } catch (error) {
-        console.error("Error fetching details:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDetails();
-  }, [repo]);
-
-  if (loading || !details) {
-    return <ActivityIndicator size="large" color="#007AFF" />;
-  }
-
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.item}>
@@ -56,10 +24,10 @@ const DetailView: React.FC<DetailViewProps> = ({ repo, onBack }) => {
         <Text style={styles.content}>{repo.full_name}</Text>
         <Text style={styles.subtitle}>Description:</Text>
         <Text style={styles.content}>{repo.description || "No description available."}</Text>
-        <Text style={styles.subtitle}>Number of Branches:</Text>
-        <Text style={styles.content}>{details.branchesCount}</Text>
-        <Text style={styles.subtitle}>Number of Commits:</Text>
-        <Text style={styles.content}>{details.commitsCount}</Text>
+        <Text style={styles.subtitle}>Created At:</Text>
+        <Text style={styles.content}>{repo.created_at}</Text>
+        <Text style={styles.subtitle}>Last Fetched At:</Text>
+        <Text style={styles.content}>{repo.last_fetched}</Text>
       </View>
 
       <View style={styles.buttonContainer}>
