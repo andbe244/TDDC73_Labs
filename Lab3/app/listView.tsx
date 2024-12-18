@@ -30,6 +30,7 @@ const ListView: React.FC<ListViewProps> = ({ onSelectRepo }) => {
 
   return (
     <View style={styles.container}>
+      <Text> HELLO </Text>
       <FlatList
         data={repos}
         keyExtractor={(item) => item.id.toString()}
