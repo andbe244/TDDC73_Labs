@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, StyleSheet } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import { fetchRepos } from "./api";
-
 
 interface Repo {
   id: number;
@@ -14,12 +14,12 @@ interface Repo {
 
 interface ListViewProps {
   onSelectRepo: (repo: Repo) => void;
-  language: string;
 }
 
-const ListView: React.FC<ListViewProps> = ({ onSelectRepo, language }) => {
+const ListView: React.FC<ListViewProps> = ({ onSelectRepo }) => {
   const [repos, setRepos] = useState<Repo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [language, setLanguage] = useState<string>("");
 
   useEffect(() => {
     setLoading(true);
@@ -35,6 +35,24 @@ const ListView: React.FC<ListViewProps> = ({ onSelectRepo, language }) => {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Trending GitHub Repositories</Text>
+        <Text style={styles.headerSubtitle}>Filter</Text>
+        <Text style={styles.headerText}>Language</Text>
+        <Picker
+          selectedValue={language}
+          onValueChange={(itemValue: string) => setLanguage(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label="All" value="" />
+          <Picker.Item label="JavaScript" value="javascript" />
+          <Picker.Item label="Python" value="python" />
+          <Picker.Item label="Java" value="java" />
+          <Picker.Item label="C++" value="cpp" />
+        </Picker>
+        <Text style={styles.result}>Result</Text>
+      </View>
+      
       <FlatList
         data={repos}
         keyExtractor={(item) => item.id.toString()}
@@ -53,14 +71,49 @@ const ListView: React.FC<ListViewProps> = ({ onSelectRepo, language }) => {
 const styles = StyleSheet.create({
   container: { 
     flex: 1, 
-    padding: 10, 
+    padding: 20, 
     backgroundColor: '#080016',
   },
+  header: { 
+    padding: 5, 
+    marginLeft: 20,
+  },
+  headerTitle: { 
+    color: '#ebebfa',
+    fontSize: 28,
+    marginBottom: 10,
+  },
+  result: { 
+    color: '#dfff80',
+    fontSize: 20,
+    marginTop: 6,
+    marginBottom: 10,
+  },
+  headerSubtitle: { 
+    color: '#c2c2f0',
+    fontSize: 18,
+    marginTop: 6,
+    marginBottom: 5,
+  },
+  headerText: {
+    fontSize: 12, 
+    color: "#9999e6",
+    //marginTop: 6,
+    marginBottom: 6,
+  },
+  picker: {
+    height: 30,
+    color: '#ebebfa',
+    width: 150,
+    backgroundColor: '#16142d',
+    marginBottom: 15,
+  },
   item: {
-    padding: 10, 
+    padding: 20, 
     borderBottomWidth: 1, 
     backgroundColor: '#16142d',
     margin: 4,
+    width: 1000,
     marginLeft: 20,
     marginRight: 20,
     borderRadius: 5,
@@ -70,13 +123,13 @@ const styles = StyleSheet.create({
     color: '#ebebfa',
     fontWeight: "bold", 
   },
-  subtitle: { 
+  content: { 
     fontSize: 14, 
     color: "#c2c2f0",
-  },
-  content: {
-    fontSize: 12,
     marginTop: 6,
+  },
+  subtitle: {
+    fontSize: 12,
     color: "#9999e6",
     lineHeight: 22,
   },
