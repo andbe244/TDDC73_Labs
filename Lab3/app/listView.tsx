@@ -45,10 +45,31 @@ const ListView: React.FC<ListViewProps> = ({ onSelectRepo }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 10 },
-  item: { padding: 10, borderBottomWidth: 1, borderColor: "#ddd" },
-  title: { fontSize: 16, fontWeight: "bold" },
-  subtitle: { fontSize: 12, color: "#555" },
+  container: { 
+    flex: 1, 
+    padding: 10, 
+    backgroundColor: 'black',
+  },
+  item: {
+    padding: 10, 
+    borderBottomWidth: 1, 
+    backgroundColor: 'gray',
+    margin: 2,
+    borderRadius: 5,
+    //borderColor: "#ddd",
+  },
+  title: { 
+    fontSize: 16, 
+    color: 'black',
+    fontWeight: "bold", 
+  },
+  subtitle: { 
+    fontSize: 12, 
+    color: "#555",
+  },
+
+
+
 });
 
 export default ListView;
