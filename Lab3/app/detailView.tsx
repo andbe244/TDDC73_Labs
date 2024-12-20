@@ -8,7 +8,6 @@ interface Repo {
   description: string;
   created_at?: string;
   last_fetched?: string;
-  
 }
 
 interface DetailViewProps {

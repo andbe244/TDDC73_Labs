@@ -10,7 +10,6 @@ interface Repo {
   description: string;
   created_at?: string; 
   last_fetched?: string; 
-  //language: string;
 }
 
 export default function Index() {
@@ -20,11 +19,8 @@ export default function Index() {
   return (
     <View style={styles.container}>
       {selectedRepo ? (
-
-       
         <DetailView repo={selectedRepo} onBack={() => setSelectedRepo(null)} />
       ) : (
-      
         <ListView
           language={language} 
           onSelectRepo={(repo) => {
